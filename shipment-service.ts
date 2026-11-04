@@ -2,16 +2,19 @@
 // import type { Shipment } from "/models";
 import { shipments } from "./models";
 
-function findShipment(id) {
+function findShipment(id: string) {
   return shipments.find((s) => s.id === id);
 }
 
-function describeShipment(id) {
+function describeShipment(id: string) {
   const shipment = findShipment(id);
+  if (!shipment){
+    return "No shipment found"
+  }
   return `${shipment.trackingId}: ${shipment.origin} -> ${shipment.destination}`;
 }
 
-function totalWeightForCustomer(customerId, statusFilter) {
+function totalWeightForCustomer(customerId: string, statusFilter: "pending" | "in_transit" | "delivered" | "delayed") {
   return shipments
     .filter((s) => s.customerId === customerId && s.status === statusFilter)
     .reduce((total, s) => total + s.weightKg, 0);
